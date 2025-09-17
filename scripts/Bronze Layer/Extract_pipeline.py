@@ -1,3 +1,18 @@
+# /*
+# ===============================================================================
+# Extract Pipeline: Load Bronze Layer (Source -> Bronze)
+# ===============================================================================
+# Script Purpose:
+#     This extracts and loads data into the 'bronze' schema from external CSV files. 
+#     It performs the following actions:
+#     - Truncates the bronze tables before loading data.
+#     - Tracking the time-consuming tasks with a file for better performance
+#     - overwrite to ensure the table is empty
+#     - Track the count in source and target to ensure the quality of data and no missing rows.
+
+# ===============================================================================
+
+
 import os
 import time
 from pyspark.sql import SparkSession
