@@ -7,6 +7,8 @@ Script Purpose:
     This script creates tables in the 'bronze' schema, dropping existing tables 
     if they already exist.
 	  Run this script to re-define the DDL structure of 'bronze' Tables
+
+**important note: creating a table with Spark is easy and helps you if the source naming is different.
 ===============================================================================
 */
 -- Drop and recreate the 'DataWarehouse' database
