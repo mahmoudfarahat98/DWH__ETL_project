@@ -31,7 +31,7 @@ file_table_map = {
     "LOC_A101.csv": "erp_loc_a101",
     "PX_CAT_G1V2.csv": "erp_px_cat_g1v2"
 }
-
+Batch_start_time = time.time() # for calculate the pipeline time
 # loop on the file mapping
 for file, table_name in file_table_map.items():
     file_path = os.path.join(folder_path, file)
@@ -71,6 +71,10 @@ for file, table_name in file_table_map.items():
 
     except Exception as e: # catch any error during insertion
         print(f"Error inserting data into {table_name}: {e}")
+        
+Batch_end_time = time.time()
+Batch_time = Batch_end_time - Batch_start_time
+print(f"the Extraction Pipeline consume {Batch_time} second")
    ---
                                                          
  folder_path = "/Users/mahmoudfarahat/Desktop/source_crm/"
@@ -81,8 +85,9 @@ file_table_map = {
     "prd_info.csv": "crm_prd_info",
     "sales_details.csv": "crm_sales_details"
 }
+Batch_start_time = time.time() # for calculate the pipeline time
 
-# 4️⃣ loop على كل CSV
+# 4️⃣ Loop on file_table_map
 for file, table_name in file_table_map.items():
     file_path = os.path.join(folder_path, file)
     table_name = f"bronze.{table_name}"              #schema name
@@ -118,3 +123,7 @@ for file, table_name in file_table_map.items():
         print(f"Successfully inserted {file}: {source_count} row , Target {target_count} rows, Time taken is {elapsed_time:.2f} seconds")
     except Exception as e:
         print(f"Error inserting data into {table_name}: {e}")
+        
+Batch_end_time = time.time()
+Batch_time = Batch_end_time - Batch_start_time
+print(f"the Extraction Pipeline consume {Batch_time} second")
