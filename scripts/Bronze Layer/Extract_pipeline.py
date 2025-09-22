@@ -50,7 +50,7 @@ for file, table_name in file_table_map.items():
             .option("driver", "com.microsoft.sqlserver.jdbc.SQLServerDriver") \
             .option("dbtable",table_name)\
             .option("user", "sa") \
-            .option("password", "YourStrongPassword1!") \
+            .option("password", "*******!") \
             .mode("overwrite") \
             .save()
         
@@ -60,7 +60,7 @@ for file, table_name in file_table_map.items():
             driver="com.microsoft.sqlserver.jdbc.SQLServerDriver",
             dbtable = table_name,
             user="sa",
-            password="YourStrongPassword1!"
+            password="*******!"
         ).load()
 
 
@@ -105,17 +105,17 @@ for file, table_name in file_table_map.items():
             .option("driver", "com.microsoft.sqlserver.jdbc.SQLServerDriver") \
             .option("dbtable", table_name) \
             .option("user", "sa") \
-            .option("password", "YourStrongPassword1!") \
+            .option("password", "***********!") \
             .mode("overwrite") \
             .save()
-        # print(f"Successfully inserted {df.count()} rows into {table_name} the number") # source_count to track number of rows in source fil
+        
     # 5️⃣ tracking the number of rows inserted
         df_target = spark.read.format("jdbc").options(
             url="jdbc:sqlserver://localhost:1433;databaseName=DWh;encrypt=true;trustServerCertificate=true",
             driver="com.microsoft.sqlserver.jdbc.SQLServerDriver",
             dbtable=table_name,
             user="sa",
-            password="YourStrongPassword1!"
+            password="*********!"
         ).load()
         target_count = df_target.count()
         end_time = time.time()
