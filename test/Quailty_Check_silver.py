@@ -117,4 +117,12 @@ erp_loc_a101.select("CNTRY").distinct().show()
 silver_dict["silver.erp_loc_a101"]= erp_loc_a101
 print(silver_dict.keys())
 
+#-------------------------- #### Quality check  of bronze erp loc a101"] ----------------------------#
+"""
+                 6.           Quality Check 
+"""
+####--------------------------------------------------------------##
+                            # Assign the table into silver dict
+silver_dict["silver.erp_px_cat_g1v2"] = erp_px_cat_g1v2
+print(silver_dict.keys())
 
