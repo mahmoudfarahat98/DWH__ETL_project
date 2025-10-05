@@ -1,6 +1,6 @@
 ## -------------------------------- Load to Silver Layer ["Full load - once - "] ------------------------------##
 """ 
-    A. the cleaned Data Frame saved in Dict {Silver Dicr}
+    A. The cleaned Data Frame saved in Dict {Silver Dict}
     B. First, we start the batch time to calculate the overall pipeline time consumed
     C. for loop in dict and add schema name silver. 
     d. We start Table time to calculate the load pipeline time consumed for each table
