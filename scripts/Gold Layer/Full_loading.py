@@ -1,4 +1,14 @@
+# -- ======================= Create JDBC [Java DataBase Connection] ======================================================
+
+jdbc_url = "jdbc:sqlserver://localhost:1433;databaseName=DWh;encrypt=true;trustServerCertificate=true"
+connection_props = {
+    "user": "sa",
+    "password": "************!",
+    "driver": "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+}
+
 #--------------------------- Loading [full load] -------------------------#
+
 import time
 
 Star_schema = {"fact_table": fact_sales,
