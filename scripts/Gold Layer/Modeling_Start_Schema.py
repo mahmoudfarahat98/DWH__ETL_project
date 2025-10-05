@@ -28,8 +28,6 @@ spark = SparkSession.builder \
 
 # -- ======================= Create JDBC [Java DataBase Connection] ======================================================
 
-# step 1: Analyze: Explore  and read to understand data
-
 jdbc_url = "jdbc:sqlserver://localhost:1433;databaseName=DWh;encrypt=true;trustServerCertificate=true"
 connection_props = {
     "user": "sa",
