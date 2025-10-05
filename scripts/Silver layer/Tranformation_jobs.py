@@ -6,10 +6,10 @@ Script Purpose:
     1. Using the stage area for transformation without affecting the  bronze layer 
     2. Reading the table from the silver layer by "jdbc" connection
     3. Transform all tables and check the quality after transformation to ensure quality and correctness.
-    4. because the  first time load into silver layer >> after transformation >>> full load, 
-    and the next file for the incremental load script
+    4. Because this load is the  first time load into the silver layer >> after transformation >>> full load, 
+    and the next time:  incremental load script.
     5. The steps :
-              A. Create a connection with database
+              A. Create a connection with the database
               B. loop in the table name and save the table in the dictionary  {dfs}
               C. Adding the time of ETL. 
               D. Clean the bronze table.
@@ -32,12 +32,12 @@ connection_props = {
 }
 
 # B. read all table
-tables = ["bronze.crm_Cust_info", "bronze.crm_prd_info","bronze.crm_sales_details",\
-          "bronze.erp_cust_az12"," bronze.erp_loc_a101","bronze.erp_px_cat_g1v2"]
+tables = ["bronze.crm_Cust_info", "bronze.crm_prd_info", "bronze.crm_sales_details",\
+          "bronze.erp_cust_az12", "bronze.erp_loc_a101", "bronze.erp_px_cat_g1v2"]
 
 # B. loop in DB tables, read all tables, and save in a dictionary for readability
 
-dfs = {} #{table, data frame}
+dfs = {}                                         # {table, data frame}
 for t in tables: 
     #jdbc is alternative way for read takes 3 argument (url = str, table = str, properties = dict[username, password, driver])
     dfs[t] = spark.read.jdbc(url=jdbc_url, table=t, properties=connection_props)
@@ -61,7 +61,7 @@ from pyspark.sql.window import Window
 from pyspark.sql.functions import col, trim
 from pyspark.sql.functions import upper
 
-# 1.A. Check duplicate in primary key    *** in Spark follows the SQL execution order 
+# 1.A. Check duplicate in primary key    *** Spark follows the SQL execution order 
 
 duplicate_key = dfs["bronze.crm_Cust_info"].groupBy("cst_id")\
     .agg(count("*").alias("count")).filter((col("count") > 1))
@@ -73,7 +73,7 @@ duplicate_key.show()
 
 # 1.C. drop duplicate, depend on row_number function on the cst_create_date
 
-window_column = Window.partitionBy("cst_id").orderBy(desc("cst_create_date"))
+window_column = Window.partitionBy("cst_id").orderBy(desc("cst_create_date"))      # the newest row
 
 addd_row_number = dfs["bronze.crm_Cust_info"].withColumn("row_number",row_number().over(window_column))
 removed_row= addd_row_number.filter(col("row_number")!= 1).show()                        # rows will be deleted
@@ -214,7 +214,7 @@ w = sales.join(customer, sales["sls_cust_id"] == customer["cst_id"], "left_anti"
 dfs["bronze.crm_sales_details"].filter(col("sls_ord_num")!= trim(col("sls_ord_num"))).show()      # No result
 
 
-# 3.D. Check Date formate in [sls_order_dt]
+# 3.D. Check Date format in [sls_order_dt]
 # sales.printSchema()                            # need to convert column datatype from int to date
 
 # 3.E. Check the data consistency order < ship < due
