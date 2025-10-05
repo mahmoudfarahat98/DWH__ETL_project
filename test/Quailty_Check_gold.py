@@ -91,7 +91,7 @@ fact_sales.alias("f").join(customer_dim, fact_sales["Customer_FK"]== customer_di
 
 # 5- Product Dimensions with high purchase [Expected Product_fk = 3, 4244 ]
 fact_sales.alias("f").join(product_dim, fact_sales["Product_FK"]== product_dim["Product_SK"],"inner")\
-.groupby("f.Product_FK").agg(count("Total_sales").alias("Hights_product")).orderBy(col("Hights_product").asc()).show()
+.groupby("f.Product_FK").agg(count("Total_sales").alias("Hights_product")).orderBy(col("Hights_product").asc().limit(1).show()
 
 # 6- Tracking the CUSTOMER with no order [Expected No Result]
 fact_sales.alias("f").join(customer_dim.alias("c"), fact_sales["Customer_FK"]== customer_dim["cust_Sk"],  "left")\
