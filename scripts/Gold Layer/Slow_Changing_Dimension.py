@@ -3,8 +3,17 @@
 We have 3 dict, the module after transformation and before loading to the target  >> {star_schema}
 & Read the destination [customer, product, fact]                                  >> {target_dim}
 & the updated rows will be loading to gold again                                  >> {incremental_dict}
+- join the source (Star_schema{}) Dim with distination dimension {target_dim} >> save in {incremental_dict}
 
 """
+# -- ======================= Create JDBC [Java DataBase Connection] ======================================================
+
+jdbc_url = "jdbc:sqlserver://localhost:1433;databaseName=DWh;encrypt=true;trustServerCertificate=true"
+connection_props = {
+    "user": "sa",
+    "password": "************!",
+    "driver": "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+
 incremental_dict={}
 target_dim = {}
 dim_list = ["fact_table","customer_dim","product_dim"]
@@ -14,24 +23,26 @@ for i in dim_list :
     count= target_dim[i].count()
     print(f"Succses loading {i}, {count} rows")
 
-""" 
-2- join the source (Star_schema{}) Dim with distination dimension target_dim
-"""
+
+#=========================================================================================================
 #--------------------------- 1 - Customer -DIM -------------------------#
+#=========================================================================================================
+
 target_cust=target_dim["customer_dim"]
 source_cust= Star_schema["customer_dim"]   # after model and before load
 
+# join the source and target
 customer_join = source_cust.alias("sc").join(target_cust.alias("tc"),col("sc.customer_number") == col("tc.customer_number") ,"left")
 
-print(target_cust.count())
-print(source_cust.count())
-# new Customer
+
+# 1. New Customer
 new_customer = customer_join.filter(col("tc.customer_number").isNull()).select("sc.*")
 
 # print(new_customer.count())  # done
 
 # No Change in any Customer info [[null != null ] so need need eqNullSafe()
 
+# 2. unchanged Customer
 Unchanged_customer = customer_join.filter (
                     (col("sc.Customer_Id").eqNullSafe(col("tc.Customer_Id")))
                     &(col("sc.customer_number").eqNullSafe(col("tc.customer_number")))
@@ -44,7 +55,7 @@ Unchanged_customer = customer_join.filter (
                     ).select("tc.*")
 
 
-# Change in any Customer info 
+# 3. Change in any Customer info 
 changed_customer = customer_join.filter (
                      (col("tc.is_current") == 1 )
                     &((col("sc.Customer_Id") != col("tc.Customer_Id"))\
@@ -58,10 +69,12 @@ changed_customer = customer_join.filter (
                                         
 # Update the target end date when (source is_current(0) != target is_current (1))
 
+# 4. Update the change to expire the date [End_date with value]
 update_target = changed_customer.select("tc.*")\
                                 .withColumn("end_date",(current_date())) \
                                 .withColumn("is_current",lit(0).cast("int"))
-                                       
+
+# 5. Insert the new information of change [current]
 new_cust_info = changed_customer.select("sc.*")\
                                 .withColumn("start_date",(current_date() )) \
                                 .withColumn("is_current",lit(1).cast("int"))
@@ -73,16 +86,18 @@ incremental_dict["customer_dim"]= Unchanged_customer.unionByName(new_customer)\
                                 .unionByName(update_target)\
                                 .unionByName(new_cust_info)
 
-# #--------------------------- 2 - Product-DIM -------------------------#
+#=========================================================================================================
+#--------------------------- 2 - Product -DIM -------------------------#
+#=========================================================================================================
 # """
 # Steps 
-#             1- join the two table [source + target]
+#             1- join the two tables [source + target]
 #             2- new product with NULL Target Product key [new product]
 #             3- clean product : { have the same row in both source & target }
 
 # --  challengs 
-# - the history id not affected because in system\
-#     any change inserted in new row autamatically put end_date and start_date
+# - the history is not affected because in system\
+#     any change inserted in a new row automatically puts end_date and start_date
 #     so find the updated product by :
 #     **- target is_current = 1 & 
 #         1- the source is_current (0) != target is_current (1)>> update target end_date with s. end_date
@@ -93,15 +108,14 @@ incremental_dict["customer_dim"]= Unchanged_customer.unionByName(new_customer)\
 target_prd= target_dim["product_dim"]     # readed from target
 source_prd= Star_schema["product_dim"]     # after model and before load
 
-# target_prd.show(2)
-# join two table
+# join the source and target
 product_join = source_prd.alias("s").join(target_prd.alias("t"),"Product_id", "left")
 
 
-# new product (prd_key not found in target) [Expected no result]
+# 1. new product (prd_key not found in target) [Expected no result]
 new_product = product_join.filter(col("t.Product_id").isNull()).select("s.*")
 
-# cleaned-row product
+# 2. Unchanged-row product
 
 cleaned_row_prd= product_join.filter((col("s.Product_id").eqNullSafe(col("t.Product_id")))\
                                 & (col("s.Product_Key").eqNullSafe(col("t.Product_Key")))\
@@ -115,8 +129,8 @@ cleaned_row_prd= product_join.filter((col("s.Product_id").eqNullSafe(col("t.Prod
                                 & (col("s.start_dt").eqNullSafe(col("t.start_dt")))\
                                 & (col("s.end_dt").eqNullSafe(col("t.end_dt")))).select("t.*")
 
-# changed rows ["for current product ,[is_Current] not Equal, or change in any field >"]
-# two Scenario , the date in source is closed > new row with new start date
+# 3. changed rows ["for current product ,[is_Current] not Equal, or change in any field >"]
+# two scenarios, the date in the source is closed > new row with a new start date
 
 changed_prd = product_join.filter((col("s.Product_Key") == col("t.Product_Key"))\
                                  & (col("t.Is_Current") == 1)
@@ -130,27 +144,18 @@ changed_prd = product_join.filter((col("s.Product_Key") == col("t.Product_Key"))
                                 |(col("s.Cost")!= col("t.Cost"))))
 
 
-# 1- the source is_current(0) != target is_current (1)>> 
-# update target end_date with s. end_date
+                # A- the source is_current(0) != target is_current (1)>>  # update target end_date with s. end_date
 
+# 4. updated the change with end_date of source
 to_update_prd = changed_prd.filter((col("s.Is_Current") != col("t.Is_Current"))&
                             (col("s.start_dt") == col("t.start_dt")))\
                             .select("t.*", col("s.end_dt").alias("sd"))\
                             .withColumn("Is_Current", lit(0).cast("int"))\
                             .withColumn("end_dt",col("sd")).drop("sd")  # colsed 
 
-
-# if historical but not in dWH [strt != start , End!= end , Current!=current]
-historical_rows_prd = changed_prd.filter(
-                (col("t.Is_Current") == 1) & 
-                (col("s.Is_Current") != col("t.Is_Current"))&
-                (col("s.start_dt") != col("t.start_dt")) &
-                (col("s.end_dt") != col("t.end_dt"))).select("s.*")
-
-      
         
-# 2- the source start_dt != target start_dt >> 
-# new row for updated product 
+                            # B- the source start_dt != target start_dt >> 
+# 5. new row for updated product  [current]
 
 new_version_prd = changed_prd.filter(((col("s.Is_Current") == col("t.Is_Current"))&
                              (col("s.start_dt") != col("t.start_dt"))))\
@@ -159,6 +164,13 @@ new_version_prd = changed_prd.filter(((col("s.Is_Current") == col("t.Is_Current"
                              .withColumn("end_dt",lit(None).cast("date"))\
                              .withColumn("Is_Current", lit(1))
 
+# 6. if historical but not in dWH [strt != start , End!= end , Current!=current]
+historical_rows_prd = changed_prd.filter(
+                (col("t.Is_Current") == 1) & 
+                (col("s.Is_Current") != col("t.Is_Current"))&
+                (col("s.start_dt") != col("t.start_dt")) &
+                (col("s.end_dt") != col("t.end_dt"))).select("s.*")
+
 # ----------- 5. Final Union -----------
 incremental_dict["product_dim"] = cleaned_row_prd.unionByName(new_product)\
                              .unionByName(to_update_prd)\
@@ -166,16 +178,21 @@ incremental_dict["product_dim"] = cleaned_row_prd.unionByName(new_product)\
                              .unionByName(historical_rows_prd)
 
 
-# #--------------------------- 3- Fact -Table -------------------------#
+#=========================================================================================================
+#--------------------------- 3 - Fact_sales -------------------------#
+#========================================================================================================
 source_fact= Star_schema["fact_table"]
 target_fact= target_dim["fact_table"]
 
-# identify new sales transactions from source
-fact_join= source_fact.alias("sf").join(target_fact.alias("tf"), "Order_number","left_anti")
+# identify new sales transactions from the source
+
+fact_join source_fact.alias("sf").join(target_fact.alias("tf"), "Order_number","left_anti")
+
 incremental_dict["fact_table"] = fact_join
 
-
+# --------------------------------------------------------------------------------------------------------------------
 # ----------- final step - loading -  -----------
+# --------------------------------------------------------------------------------------------------------------------
 
 import time
 
