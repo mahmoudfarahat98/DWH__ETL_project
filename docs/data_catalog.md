@@ -54,25 +54,16 @@ The Gold Layer is the business-level data representation, structured to support 
 
 | Column Name     | Data Type     | Description                                                                                   |
 |-----------------|---------------|-----------------------------------------------------------------------------------------------|
-| date_sk         | INT           |Surrogate key for the date dimension (format: YYYYMMDD).                    
-        |
-| full_date       | Date           | The actual calendar date (e.g., '2025-10-06').                         
-        |
-| Year            | INT           | The calendar year (2017).  
-        |
-| month           | INT           | The Month of the year (1–12).                    
-        |
-| day             | INT           | The day of the month (1–31).                    
-        |
-| Quarter         | INT           | The quarter of the year (1-4).                    
-        |
-| week_of_year    | INT           | The Week of the year (1–52).                    
-        |
-| day_name        | NVARCHAR(50)   | The day name (Saturday). 
-        |
-| Month_name      | NVARCHAR(50)   | The Month name (May).                    
-        |
-| is_weekend      | INT           |Indicator if the date is a holiday (1 = Yes, 0 = No). (based on business calendar rules).
+| date_sk         | INT           |Surrogate key for the date dimension (format: YYYYMMDD).|
+| full_date       | Date           | The actual calendar date (e.g., '2025-10-06').|
+| Year            | INT           | The calendar year (2017).|
+| month           | INT           | The Month of the year (1–12).|
+| day             | INT           | The day of the month (1–31).|
+| Quarter         | INT           | The quarter of the year (1-4).|
+| week_of_year    | INT           | The Week of the year (1–52).|
+| day_name        | NVARCHAR(50)   | The day name (Saturday).|
+| Month_name      | NVARCHAR(50)   | The Month name (May).|
+| is_weekend      | INT           |Indicator if the date is a holiday (1 = Yes, 0 = No). (based on business calendar rules).|
 
 
 
