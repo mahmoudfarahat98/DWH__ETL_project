@@ -21,11 +21,9 @@ The Gold Layer is the business-level data representation, structured to support 
 | gender           | NVARCHAR(50)  | The gender of the customer (e.g., 'Male', 'Female', 'n/a').                                  |
 | birthdate        | DATE          | The date of birth of the customer, formatted as YYYY-MM-DD (e.g., 1971-10-06).               |
 | create_date      | DATE          | The date and time when the customer record was created in the system|
-| Start_date       | DATE          | The date when the customer information is entered  into DWH 'SCD'.
-        |
-| End_date         | DATE          | The date and time when the customer updated their information 'SCD'.
-        |
-| Is_Current       | INT          | The status of the row historical / or Current 'SCD'.
+| Start_date       | DATE          | The date when the customer information is entered  into DWH 'SCD'.|
+| End_date         | DATE          | The date and time when the customer updated their information 'SCD'.|
+| Is_Current       | INT          | The status of the row, historical / or Current 'SCD'.
 
 ---
 
