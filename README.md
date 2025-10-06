@@ -40,10 +40,10 @@ Hi there! I'm Mahmoud Farahat. I’m a Data Engineer Passionate about **Big Data
 - 🚀 Always eager to learn new technologies and improve my skills.
   
 ---
-
 <p align="center">
   <a href="https://git.io/typing-svg">
-    <img src="https://readme-typing-svg.herokuapp.com?size=25&color=00C2FF&speed=100&pause=1500&lines=Thank+You👋, alt="Typing SVG" />
+    <img src="https://readme-typing-svg.herokuapp.com?size=30&color=00C2FF&speed=100&pause=1500&lines=Thank+You+💙+👋" alt="Typing SVG" />
   </a>
 </p>
+
 
