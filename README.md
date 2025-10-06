@@ -38,11 +38,10 @@ Hi there! I'm Mahmoud Farahat. I’m a Data Engineer Passionate about **Big Data
 - 📊 Experienced with **Power BI** and **Tableau** for BI solutions.  
 - ☁️ Familiar with **Cloud platforms** and tools like **Docker**, **Airflow**, and **Spark**.  
 - 🚀 Always eager to learn new technologies and improve my skills.
-- 
-Let's stay in touch! Feel free to connect with me on the following platforms:
+  
 ---
 
 <p align="center">
-  <img src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif" alt="Thank You" width="400"/>
+  <img src="https://tenor.com/view/thank-you-blue-appreciation-gif-351713182696299319" alt="Thank You" width="300" />
 </p>
 
