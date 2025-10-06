@@ -23,7 +23,7 @@ The Gold Layer is the business-level data representation, structured to support 
 | create_date      | DATE          | The date and time when the customer record was created in the system|
 | Start_date       | DATE          | The date when the customer information is entered  into DWH 'SCD'.|
 | End_date         | DATE          | The date and time when the customer updated their information 'SCD'.|
-| Is_Current       | INT          | The status of the row, historical / or Current 'SCD'.
+| Is_Current       | INT          | The status of the row, historical / or Current 'SCD'[ 1 for Active, 0 is history ].
 
 ---
 
