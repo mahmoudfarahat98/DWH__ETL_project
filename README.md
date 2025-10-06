@@ -42,7 +42,8 @@ Hi there! I'm Mahmoud Farahat. I’m a Data Engineer Passionate about **Big Data
 ---
 
 <p align="center">
-  <img src="https://media.giphy.com/media/xT9IgG50Fb7Mi0prBC/giphy.gif" alt="Thank You Blue" width="300" />
+  <a href="https://git.io/typing-svg">
+    <img src="https://readme-typing-svg.herokuapp.com?size=25&color=00C2FF&speed=100&pause=1500&lines=Hi+👋,+welcome+to+my+GitHub!;Don’t+forget+to+follow+🚀;I'm+Data+Engineer+⚡;BI+Analyst+📊" alt="Typing SVG" />
+  </a>
 </p>
-
 
