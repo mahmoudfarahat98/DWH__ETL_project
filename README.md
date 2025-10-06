@@ -42,6 +42,7 @@ Hi there! I'm Mahmoud Farahat. I’m a Data Engineer Passionate about **Big Data
 ---
 
 <p align="center">
-  <img src="https://tenor.com/view/thank-you-blue-gif-2202493717928683912" alt="Thank You Blue" width="300" />
+  <img src="https://media.giphy.com/media/xT9IgG50Fb7Mi0prBC/giphy.gif" alt="Thank You Blue" width="300" />
 </p>
+
 
