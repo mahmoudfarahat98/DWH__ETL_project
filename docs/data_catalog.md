@@ -54,7 +54,7 @@ The Gold Layer is the business-level data representation, structured to support 
 
 | Column Name     | Data Type     | Description                                                                                   |
 |-----------------|---------------|-----------------------------------------------------------------------------------------------|
-| date_sk         | INT           |Surrogate key for the date dimension (format: YYYYMMDD)..                    
+| date_sk         | INT           |Surrogate key for the date dimension (format: YYYYMMDD).                    
         |
 | full_date       | Date           | The actual calendar date (e.g., '2025-10-06').                         
         |
