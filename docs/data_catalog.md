@@ -44,6 +44,8 @@ The Gold Layer is the business-level data representation, structured to support 
 | cost                | INT           | The cost or base price of the product, measured in monetary units.                            |
 | product_line        | NVARCHAR(50)  | The specific product line or series to which the product belongs (e.g., Road, Mountain).      |
 | start_date          | DATE          | The date when the product became available for sale or use, stored in|
+| End_date         | DATE          | The date and time when the Product becomes not Available for sale or use 'SCD'.|
+| Is_Current       | INT          | The status of the row, historical / or Current 'SCD'[ 1 for Active, 0 is history ].
 
 ---
 
