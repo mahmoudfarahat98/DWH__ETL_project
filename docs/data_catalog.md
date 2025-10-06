@@ -33,9 +33,9 @@ The Gold Layer is the business-level data representation, structured to support 
 
 | Column Name         | Data Type     | Description                                                                                   |
 |---------------------|---------------|-----------------------------------------------------------------------------------------------|
-| product_key         | INT           | Surrogate key uniquely identifying each product record in the product dimension table.         |
+| product_SK         | INT           | Surrogate key uniquely identifying each product record in the product dimension table.         |
 | product_id          | INT           | A unique identifier assigned to the product for internal tracking and referencing.            |
-| product_number      | NVARCHAR(50)  | A structured alphanumeric code representing the product, often used for categorization or inventory. |
+| product_Key      | NVARCHAR(50)  | A structured alphanumeric code representing the product, often used for categorization or inventory. |
 | product_name        | NVARCHAR(50)  | Descriptive name of the product, including key details such as type, color, and size.         |
 | category_id         | NVARCHAR(50)  | A unique identifier for the product's category, linking to its high-level classification.     |
 | category            | NVARCHAR(50)  | The broader classification of the product (e.g., Bikes, Components) to group related items.  |
@@ -48,6 +48,35 @@ The Gold Layer is the business-level data representation, structured to support 
 | Is_Current       | INT          | The status of the row, historical / or Current 'SCD'[ 1 for Active, 0 is history ].
 
 ---
+### 3. **Gold_Date_Dim**
+- **Purpose:** Stores Date for analytical purposes.
+- **Columns:**
+
+| Column Name     | Data Type     | Description                                                                                   |
+|-----------------|---------------|-----------------------------------------------------------------------------------------------|
+| date_sk         | INT           |Surrogate key for the date dimension (format: YYYYMMDD)..                    
+        |
+| full_date       | Date           | The actual calendar date (e.g., '2025-10-06').                         
+        |
+| Year            | INT           | The calendar year (2017).  
+        |
+| month           | INT           | The Month of the year (1–12).                    
+        |
+| day             | INT           | The day of the month (1–31).                    
+        |
+| Quarter         | INT           | The quarter of the year (1-4).                    
+        |
+| week_of_year    | INT           | The Week of the year (1–52).                    
+        |
+| day_name        | NVARCHAR(50)   | The day name (Saturday). 
+        |
+| Month_name      | NVARCHAR(50)   | The Month name (May).                    
+        |
+| is_weekend      | INT           |Indicator if the date is a holiday (1 = Yes, 0 = No). (based on business calendar rules).
+
+
+
+
 
 ### 3. **gold.fact_sales**
 - **Purpose:** Stores transactional sales data for analytical purposes.
